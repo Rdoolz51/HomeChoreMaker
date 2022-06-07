@@ -10,6 +10,20 @@ function taskFormHandler(event) {
     var taskNameInput = document.querySelector("input[name='task-name']").value;
     var taskAsigneeInput = document.querySelector("select[name='task-assignee']").value;
 
+    //check to see if both fields of the form are filled out.
+    if(!taskNameInput || !taskAsigneeInput) {
+        alert("You need to fill out both fields.");
+        formEl.reset();
+        return false;
+    }
+    else if (taskNameInput == " " || taskNameInput == "  ") {
+        alert("You Left The Task Name Blank, Please Give Your Task A Name!");
+        formEl.reset();
+        return false;
+    }
+
+    formEl.reset();
+
     var taskDataObj = {
         name: taskNameInput,
         assignee: taskAsigneeInput
