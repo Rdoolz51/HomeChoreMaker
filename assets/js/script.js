@@ -23,7 +23,7 @@ function taskFormHandler(event) {
         return false;
     }
     else if (taskNameInput == " " || taskNameInput == "  ") {
-        alert("You Left The Task Name Blank, Please Give Your Task A Name!");
+        alert("You Left The Chore Name Blank, Please Give Your Task A Name!");
         formEl.reset();
         return false;
     }
@@ -150,7 +150,7 @@ function completeEditTask(taskName, taskAssignee, taskId) {
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-assignee").textContent = taskAssignee;
 
-    alert("Task Updated!");
+    alert("Chore Updated!");
 
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Chore";
