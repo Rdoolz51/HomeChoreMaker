@@ -117,7 +117,7 @@ footer {
   font-size: 1.8rem;
 }
 
-.task-type {
+.task-assignee {
   color: var(--secondary);
   font-size: 1.55rem;
 }
