@@ -2,9 +2,12 @@ var tasksToDoEl = document.querySelector("#tasks-to-do");
 var formEl = document.querySelector("#task-form");
 var taskIdCounter = 0;
 var pageContentEl = document.querySelector("#page-content");
+var tasksInProgressEl = document.querySelector("#tasks-in-progress");
+var tasksCompletedEl = document.querySelector("#tasks-completed");
 
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
+pageContentEl.addEventListener("change", taskStatusChangeHandler);
 
 function taskFormHandler(event) {
 
@@ -27,12 +30,20 @@ function taskFormHandler(event) {
 
     formEl.reset();
 
-    var taskDataObj = {
-        name: taskNameInput,
-        assignee: taskAsigneeInput
-    };
+    var isEdit = formEl.hasAttribute("data-task-id");
 
-    createTaskEl(taskDataObj);
+    if(isEdit){
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskAsigneeInput, taskId);
+    }
+    else {
+        var taskDataObj = {
+            name: taskNameInput,
+            assignee: taskAsigneeInput
+        };
+        
+        createTaskEl(taskDataObj);
+    }
     
 }
 
@@ -133,8 +144,44 @@ function editTask(taskId) {
 
 }
 
+function completeEditTask(taskName, taskAssignee, taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-assignee").textContent = taskAssignee;
+
+    alert("Task Updated!");
+
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Chore";
+
+}
+
 function deleteTask(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
+}
+
+function taskStatusChangeHandler(event) {
+    //get the task items id
+    var taskId = event.target.getAttribute("data-task-id");
+
+    // get the currently selected option's value and convert to lowercase
+    var statusValue = event.target.value.toLowerCase();
+
+    //find the parent element based on the id
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    if(statusValue === "to do") {
+        tasksToDoEl.appendChild(taskSelected);
+    }
+
+   else if(statusValue === "in progress") {
+        tasksInProgressEl.appendChild(taskSelected);
+    }
+
+    else if(statusValue === "completed") {
+        tasksCompletedEl.appendChild(taskSelected);
+    }
 }
 
