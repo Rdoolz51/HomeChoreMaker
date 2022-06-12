@@ -24,7 +24,7 @@ function taskFormHandler(event) {
         return false;
     }
     else if (taskNameInput == " " || taskNameInput == "  ") {
-        alert("You Left The Chore Name Blank, Please Give Your Task A Name!");
+        alert("You Left The Task Name Blank, Please Give Your Task A Name!");
         formEl.reset();
         return false;
     }
@@ -224,19 +224,43 @@ function saveTasks() {
 }
 
 function loadTasks() {
-   var savedTasks = localStorage.getItem("tasks");
 
-    if (!savedTasks) {
+    tasks = localStorage.getItem("tasks");
+    if (!tasks) {
+        tasks = [];
         return false;
     }
+    tasks = JSON.parse(tasks);
+    console.log(tasks);
 
-    savedTasks = JSON.parse(tasks);
+    for(i = 0; i < tasks.length; i++) {
+        tasks[i].id = taskIdCounter;
+        listItemEl = document.createElement("li");
+        listItemEl.className = "task-item";
+        listItemEl.setAttribute("data-task-id", tasks[i].id);
+        taskInfoEl = document.createElement("div");
+        taskInfoEl.className = "task-info";
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-assignee'>" + tasks[i].assignee + "</span>";
+        listItemEl.appendChild(taskInfoEl);
+        taskActionsEl = createTaskActions(tasks[i].id);
+        listItemEl.appendChild(taskActionsEl);
 
-    for (var i = 0; i < savedTasks.length; i++) {
-        createTaskEl(savedTasks[i]);
+        if (tasks[i].status === "to do") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+            tasksToDoEl.appendChild(listItemEl);
+        }
+        else if (tasks[i].status === "in progress") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 1;
+            tasksInProgressEl.appendChild(listItemEl);
+        }
+        else if (tasks[i].status === "completed") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            tasksCompletedEl.appendChild(listItemEl);
+        }
+        taskIdCounter++;
+        console.log(listItemEl);
+
     }
-
-   
 }
 
 loadTasks();
